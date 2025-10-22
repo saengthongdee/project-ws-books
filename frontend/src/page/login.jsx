@@ -60,7 +60,7 @@ function Login() {
 
     } catch (error) {
       console.error('Login error:', error);
-      setError('ข้อมูลไม่ถุกต้อง');
+      setError('username หรือ password ไม่ถุกต้อง');
       setLoading(false)
     }
   }
