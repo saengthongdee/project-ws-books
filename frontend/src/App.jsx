@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 import "./App.css";
 
 import Login from "./page/login";
+import Dashboard from "./page/admin/dashbord";
+import Home from "./page/user/home";
  
 function App() {
 
@@ -12,6 +14,8 @@ function App() {
         <Routes>
           <Route path='/' element={ <Navigate to='login'/>}/>
           <Route path='login' element={<Login/>}/>
+          <Route path='dashboard' element={<Dashboard/>}/>
+          <Route path='home' element={<Home/>}/>
         </Routes>
       </div>
     </Router>
