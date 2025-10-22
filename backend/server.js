@@ -6,6 +6,8 @@ const app = express();
 
 require('dotenv').config();
 
+const db = require('./db');
+
 app.use(express.json());
 app.use(cors());
 
@@ -30,7 +32,17 @@ app.post('/login' , (req ,res) => {
             if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
 
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            res.json({ message: 'Login successful', token });
+            
+            res.json(
+                { 
+                    message: 'Login successful',
+                    token,
+                    user: {
+                        username: user.username,
+                        role: user.role,
+                        user_id: user.user_id
+                    } 
+                });
 
         }
     )
