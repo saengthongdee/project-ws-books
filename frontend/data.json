@@ -1,0 +1,112 @@
+[
+  {
+    "title": "แฮร์รี่ พอตเตอร์กับศิลาอาถรรพ์",
+    "author": "เจ.เค. โรว์ลิ่ง",
+    "category_id": 1,
+    "total_quantity": 5,
+    "available": 5,
+    "isbn": "9786160821051",
+    "description": "นิยายแฟนตาซีเกี่ยวกับเด็กชายพ่อมดผู้มีชื่อเสียง",
+    "cover_image": "https://images-na.ssl-images-amazon.com/images/I/51G3UYYfKFL.jpg"
+  },
+  {
+    "title": "เดอะ ฮอบบิท",
+    "author": "เจ.อาร์.อาร์. โทลคีน",
+    "category_id": 1,
+    "total_quantity": 4,
+    "available": 4,
+    "isbn": "9786160501015",
+    "description": "การผจญภัยของบิลโบ แบ๊กกิ้นส์",
+    "cover_image": "https://i.pinimg.com/736x/46/00/f7/4600f79bac06724a97dd39ccc24db354.jpg"
+  },
+  {
+    "title": "ชีวิตหลังความตาย",
+    "author": "อนิจจัง",
+    "category_id": 1,
+    "total_quantity": 3,
+    "available": 3,
+    "isbn": "9786161837021",
+    "description": "นิยายปรัชญาชีวิต",
+    "cover_image": "https://cdn-local.mebmarket.com/meb/server1/33022/Thumbnail/book_detail_large.gif?5"
+  },
+  {
+    "title": "เกมล่าชีวิต",
+    "author": "ซูซานน์ คอลลินส์",
+    "category_id": 1,
+    "total_quantity": 5,
+    "available": 5,
+    "isbn": "9786160505623",
+    "description": "นิยายไซไฟแอ็คชั่น",
+    "cover_image": "https://tse2.mm.bing.net/th/id/OIP.ToVpO11yo46XcpzeyvDJEwHaLc?pid=ImgDet&w=184&h=284&c=7&dpr=1.3&o=7&rm=3"
+  },
+  {
+    "title": "แม่มดเมืองไทย",
+    "author": "สราวุธ สุวรรณพิทักษ์",
+    "category_id": 1,
+    "total_quantity": 2,
+    "available": 2,
+    "isbn": "9786160900145",
+    "description": "นิยายแฟนตาซีไทย",
+    "cover_image": "https://m.media-amazon.com/images/I/41cweL2v4tL._SY445_SX342_.jpg"
+  },
+  {
+    "title": "1984",
+    "author": "จอร์จ ออร์เวลล์",
+    "category_id": 1,
+    "total_quantity": 4,
+    "available": 4,
+    "isbn": "9786160823451",
+    "description": "นิยายดิสโทเปีย",
+    "cover_image": "https://i.pinimg.com/736x/6e/8f/1a/6e8f1aff1cb39217f39365b282c1ccfc.jpg"
+  },
+  {
+    "title": "ฟาร์มสัตว์",
+    "author": "จอร์จ ออร์เวลล์",
+    "category_id": 1,
+    "total_quantity": 3,
+    "available": 3,
+    "isbn": "9786160501234",
+    "description": "นิยายเสียดสีการเมือง",
+    "cover_image": "https://tse2.mm.bing.net/th/id/OIP.yxJcogpoeEDfePubuOh2FQHaKi?rs=1&pid=ImgDetMain&o=7&rm=3"
+  },
+  {
+    "title": "คิดง่ายให้ชีวิตง่าย",
+    "author": "เทวิน ธีระกุล",
+    "category_id": 1,
+    "total_quantity": 5,
+    "available": 5,
+    "isbn": "9786160900234",
+    "description": "นิยายแนวคิดชีวิต",
+    "cover_image": "https://i.pinimg.com/736x/09/5c/95/095c95b8468b557556409089b5a8882b.jpg"
+  },
+  {
+    "title": "รักที่ถูกลืม",
+    "author": "อิงอร รุจิกรกานต์",
+    "category_id": 1,
+    "total_quantity": 4,
+    "available": 4,
+    "isbn": "9786160501456",
+    "description": "นิยายรักโรแมนติก",
+    "cover_image": "https://cdn-local.mebmarket.com/meb/server1/114242/Thumbnail/book_detail_large.gif?3"
+  },
+  {
+    "title": "บันทึกหัวใจนายอันตราย",
+    "author": "คาราบาว",
+    "category_id": 1,
+    "total_quantity": 2,
+    "available": 2,
+    "isbn": "9786160501678",
+    "description": "นิยายเยาวชน",
+    "cover_image": "https://tse4.mm.bing.net/th/id/OIP.9SuWZAjMdF4RjDEYxSQXtAAAAA?pid=ImgDet&w=184&h=264&c=7&dpr=1.3&o=7&rm=3"
+  },
+  {
+    "title": "เจ้าหญิงน้อยในอาทิตย์",
+    "author": "ภัทรธิดา",
+    "category_id": 1,
+    "total_quantity": 3,
+    "available": 3,
+    "isbn": "9786160501890",
+    "description": "นิยายวรรณกรรม",
+    "cover_image": "https://image.dek-d.com/27/0974/0680/133557028"
+  }
+]
