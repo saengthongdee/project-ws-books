@@ -48,6 +48,14 @@ app.post('/login' , (req ,res) => {
     )
 })
 
+app.get('/books' , (req, res) => {
+    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
+        if(err) return res.status(500).json({message: "Missing fields"})
+
+        return res.status(200).json({ results});
+    })
+})
+
 app.listen(process.env.PORT , () => {
     console.log(`server is running on port ${process.env.PORT}`);
 })

@@ -11,12 +11,6 @@ export default function Nav() {
   const [active, setActive] = useState("manager");
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  const handleClick = () => {
-    console.log(active);
-  };
-
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/login");
