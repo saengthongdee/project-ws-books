@@ -5,6 +5,8 @@ import "./App.css";
 import Login from "./page/login";
 import Dashboard from "./page/admin/dashbord";
 import Home from "./page/user/home";
+import Approve from "./page/admin/approve";
+import ReturnBooks from "./page/admin/returnbooks"
  
 function App() {
 
@@ -16,6 +18,8 @@ function App() {
           <Route path='login' element={<Login/>}/>
           <Route path='dashboard' element={<Dashboard/>}/>
           <Route path='home' element={<Home/>}/>
+          <Route path='approve' element={<Approve/>}/>
+          <Route path='returnbooks' element={<ReturnBooks/>}/>
         </Routes>
       </div>
     </Router>

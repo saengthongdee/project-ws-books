@@ -8,13 +8,18 @@ import {
 } from "lucide-react";
 
 export default function Nav() {
-  const [active, setActive] = useState("manager");
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("user");
     navigate("/login");
   };
+
+  const handleSelec = (select) => {
+
+    navigate(`/${select}`);
+  
+  }
 
   return (
     <nav className="w-[15vw] min-w-[230px] h-screen bg-gradient-to-b from-[#41826e] to-[#2e5f50] shadow-lg flex flex-col">
@@ -27,7 +32,7 @@ export default function Nav() {
 
       <div className="flex flex-col gap-3 p-4 mt-4">
         <button
-          onClick={() => setActive("manager")}
+          onClick={() => handleSelec('dashboard')}
           className="flex items-center gap-3 px-4 py-2 border border-white/30 rounded-lg text-white hover:bg-white/20 hover:border-white/60 transition-all duration-200"
         >
           <BookOpen className="w-5 h-5" />
@@ -35,7 +40,7 @@ export default function Nav() {
         </button>
 
         <button
-          onClick={() => setActive("Approval")}
+           onClick={() => handleSelec('approve')}
           className="flex items-center gap-3 px-4 py-2 border border-white/30 rounded-lg text-white hover:bg-white/20 hover:border-white/60 transition-all duration-200"
         >
           <ClipboardCheck className="w-5 h-5" />
@@ -43,7 +48,7 @@ export default function Nav() {
         </button>
 
         <button
-          onClick={() => setActive("return")}
+          onClick={() => handleSelec('return')}
           className="flex items-center gap-3 px-4 py-2 border border-white/30 rounded-lg text-white hover:bg-white/20 hover:border-white/60 transition-all duration-200"
         >
           <RotateCcw className="w-5 h-5" />
