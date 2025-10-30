@@ -75,8 +75,12 @@ function Dashboard() {
     let filtered = allbooks;
 
     if (debounce) {
-      filtered = filtered.filter(book =>
-        book.title.toLowerCase().includes(debounce.toLowerCase())
+
+      const searchKeys = ["book_id", "title", "author", "category_name" , "isbn"];
+
+      filtered = filtered.filter(book => searchKeys.some(key =>
+          book[key]?.toString().toLowerCase().includes(debounce.toLowerCase())
+        )
       );
     }
 
@@ -86,6 +90,7 @@ function Dashboard() {
 
     setBooks(filtered);
   }, [debounce, category, allbooks]);
+
 
   const handleDelete = (id) => {
 
@@ -223,8 +228,10 @@ function Dashboard() {
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">รหัสหนังสือ</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">ชื่อหนังสือ</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">ผู้แต่ง</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">ISBN</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">หมวดหมู่</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">คงเหลือ</th>
+
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200"></th>
                   </tr>
                 </thead>
@@ -246,6 +253,9 @@ function Dashboard() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm text-black/70">{book.author}</span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="text-sm text-black/70">{book.isbn}</span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="inline-flex items-center py-1 text-[#41826e] rounded-full text-sm font-medium ">

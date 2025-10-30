@@ -34,6 +34,7 @@ function Login() {
   }, [navigate]);
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     setError('');
 
@@ -50,6 +51,7 @@ function Login() {
         localStorage.setItem('token', response.data.token);
 
         if (response.data.user) {
+
           localStorage.setItem('user', JSON.stringify(response.data.user));
 
           const user = response.data.user;
