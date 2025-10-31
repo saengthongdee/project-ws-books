@@ -15,18 +15,15 @@ function approve() {
     const [request, setRequest] = useState(Data);
     const [Allrequest, setAllrequest] = useState(Data);
     const [type , setType] = useState(null);
-    const [requestId , setRequestId]  = useState(null);
-
     
 const handleClickRequest = (actionType, id) => {
 
   if (!actionType || !id) return;
 
+
   setRequest((prev) => prev.filter((item) => item.request_id !== id));
 
   setAllrequest((prev) => prev.filter((item) => item.request_id !== id));
-
-  console.log(`Action: ${actionType} | Removed request_id: ${id}`);
 
 };
 
@@ -138,7 +135,7 @@ const handleClickRequest = (actionType, id) => {
                             value={type} 
                             onClick={() => handleClickRequest('approve', items.request_id)}
 
-                            className="inline-flex items-center py-1 border px-3  z-99 bg-amber-400 text-black/70 rounded-md border-black/30 text-sm font-medium ">
+                            className="inline-flex items-center py-1  px-3  z-99 bg-amber-500 text-white hover:bg-amber-600 rounded-md border-black/30 text-sm font-medium ">
                             อนุมัติ
                           </span>
                         </td>             
@@ -146,7 +143,7 @@ const handleClickRequest = (actionType, id) => {
                           <span 
                             value={type} 
                             onClick={() => handleClickRequest('reject', items.request_id)}
-                            className="inline-flex items-center py-1 px-3 border z-99 text-sm font-medium  bg-red-400 text-black/70 rounded-md border-black/30">
+                            className="inline-flex items-center py-1 px-3  z-99 text-sm font-medium  bg-red-400 hover:bg-red-600 text-white rounded-md border-black/30">
                             ยกเลิก
                           </span>
                         </td>
@@ -157,7 +154,7 @@ const handleClickRequest = (actionType, id) => {
                       <td colSpan="5" className="px-6 py-12 text-center">
                         <div className="flex flex-col items-center justify-center text-slate-400">
                           <BookOpen size={48} className="mb-3 opacity-50" />
-                          <p className="text-sm font-medium">ไม่พบข้อมูลหนังสือ</p>
+                          <p className="text-sm font-medium">ไม่พบคำร้องขอยืมหนังสือ</p>
                           <p className="text-xs mt-1">ลองค้นหาด้วยคำค้นอื่นหรือเปลี่ยนหมวดหมู่</p>
                         </div>
                       </td>

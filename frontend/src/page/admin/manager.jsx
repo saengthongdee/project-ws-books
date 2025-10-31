@@ -4,7 +4,7 @@ import Nav from "../../components/nav";
 import { BookText, Plus, Search, BookOpen, Filter } from 'lucide-react';
 import axios from "axios";
 
-function Dashboard() {
+function Manager() {
   const navigate = useNavigate();
   const [debounce, setDebounce] = useState('');
   const [search, setSearch] = useState('');
@@ -266,7 +266,7 @@ function Dashboard() {
                           </span>
                         </td>
                         <td  className="px-6 py-4 whitespace-nowrap text-sm  flex justify-center text-center z-99">
-                           <div onClick={() => handleDelete(book.book_id)} className="border px-5 p-1 bg-red-400 text-white rounded-md border-transparent">ลบ</div>
+                           <div onClick={() => handleDelete(book.book_id)} className="border px-5 p-1 bg-red-400 hover:bg-red-600 text-white rounded-md border-transparent">ลบ</div>
                         </td>
                       </tr>
                     ))
@@ -291,4 +291,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Manager;
