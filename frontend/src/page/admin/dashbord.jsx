@@ -102,9 +102,7 @@ function Dashboard() {
 
   return (
     <div className="w-screen h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex">
-      <Nav />
-
-      
+      <Nav />  
       
       <div className="flex-1 relative flex flex-col h-screen overflow-hidden">
         {/* Header Section */}

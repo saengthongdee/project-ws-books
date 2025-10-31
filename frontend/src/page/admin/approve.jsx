@@ -2,6 +2,7 @@ import React,{useState ,useEffect} from 'react'
 import Nav from '../../components/nav';
 import { useNavigate } from "react-router-dom";
 import { Search, BookOpen } from 'lucide-react';
+import Data from "../../../request.json";
 import axios from "axios";
 
 function approve() {
@@ -11,23 +12,10 @@ function approve() {
 
     const [debounce, setDebounce] = useState('');
     const [search, setSearch] = useState('');
-    const [books, setBooks] = useState([]);
-    const [allbooks, setAllbooks] = useState([]);
+    const [books, setBooks] = useState(Data);
+    const [allbooks, setAllbooks] = useState(Data);
 
-   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/books');
-        if (response.status === 200) {
-          setBooks(response.data.results);
-          setAllbooks(response.data.results);
-        }
-      } catch (error) {
-        console.log('fetching error', error);
-      }
-        }
-        fetchData();
-    }, []);
+
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -95,11 +83,11 @@ function approve() {
               <table className="min-w-full">
                 <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0 z-10">
                   <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">หมายเลขคำร้องขอ</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">รหัสนักศึกษา</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">รหัสหนังสือ</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">ชื่อหนังสือ</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">ผู้แต่ง</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">หมวดหมู่</th>
-                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">คงเหลือ</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">วันที่ร้องขอ</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200"></th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200"></th>
                   </tr>
                 </thead>
