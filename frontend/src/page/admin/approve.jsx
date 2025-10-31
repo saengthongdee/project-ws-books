@@ -12,8 +12,24 @@ function approve() {
 
     const [debounce, setDebounce] = useState('');
     const [search, setSearch] = useState('');
-    const [books, setBooks] = useState(Data);
-    const [allbooks, setAllbooks] = useState(Data);
+    const [request, setRequest] = useState(Data);
+    const [Allrequest, setAllrequest] = useState(Data);
+    const [type , setType] = useState(null);
+    const [requestId , setRequestId]  = useState(null);
+
+    
+const handleClickRequest = (actionType, id) => {
+
+  if (!actionType || !id) return;
+
+  setRequest((prev) => prev.filter((item) => item.request_id !== id));
+
+  setAllrequest((prev) => prev.filter((item) => item.request_id !== id));
+
+  console.log(`Action: ${actionType} | Removed request_id: ${id}`);
+
+};
+
 
 
 
@@ -26,16 +42,16 @@ function approve() {
 
    useEffect(() => {
 
-     let filtered = allbooks;
+     let filtered = Allrequest;
  
      if (debounce) {
-        filtered = filtered.filter(book =>
-        book.title.toLowerCase().includes(debounce.toLowerCase())
+        filtered = filtered.filter(request =>
+        request.user_id.toLowerCase().includes(debounce.toLowerCase())
        );
      }
 
-     setBooks(filtered);
-   }, [debounce,allbooks]);
+     setRequest(filtered);
+   }, [debounce,Allrequest]);
 
   useEffect(() => {
     if (!user) {
@@ -92,36 +108,47 @@ function approve() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100">
-                  {books.length > 0 ? (
-                    books.map((book, index) => (
+                  {request.length > 0 ? (
+                    request.map((items, index) => (
                       <tr key={index} className="hover:bg-blue-50 transition-all cursor-pointer ">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm font-mono font-semibold text-black/60">
-                            {book.book_id}
+                            {items.request_id}
                           </span>
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
                             <span className="text-sm font-medium text-black/70">
-                              {book.title}
+                              {items.user_id}
                             </span>
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="text-sm text-black/70">{book.author}</span>
+                          <span className="inline-flex items-center text-black/70 py-1 rounded-full text-sm font-medium ">
+                            {items.book_id}
+                          </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="inline-flex items-center py-1 text-[#41826e] rounded-full text-sm font-medium ">
-                            {book.category_name}
+                            {items.request_date}
                           </span>
                         </td>
+                       <td className="px-6 py-4 whitespace-nowrap"> 
+                          <span 
+                            value={type} 
+                            onClick={() => handleClickRequest('approve', items.request_id)}
+
+                            className="inline-flex items-center py-1 border px-3  z-99 bg-amber-400 text-black/70 rounded-md border-black/30 text-sm font-medium ">
+                            อนุมัติ
+                          </span>
+                        </td>             
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold `}>
-                            {book.available} เล่ม
+                          <span 
+                            value={type} 
+                            onClick={() => handleClickRequest('reject', items.request_id)}
+                            className="inline-flex items-center py-1 px-3 border z-99 text-sm font-medium  bg-red-400 text-black/70 rounded-md border-black/30">
+                            ยกเลิก
                           </span>
-                        </td>
-                        <td  className="px-6 py-4 whitespace-nowrap text-sm  flex justify-center text-center z-99">
-                           <div className="border px-5 p-1 bg-[#e9bf19] text-white rounded-md border-transparent">อนุมัติ</div>
                         </td>
                       </tr>
                     ))
