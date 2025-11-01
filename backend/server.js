@@ -40,7 +40,9 @@ app.post('/login' , (req ,res) => {
                     user: {
                         username: user.username,
                         role: user.role,
-                        user_id: user.user_id
+                        user_id: user.user_id,
+                        fullname: user.fullname,
+                        email: user.email
                     } 
                 });
 
@@ -49,7 +51,7 @@ app.post('/login' , (req ,res) => {
 })
 
 app.get('/books' , (req, res) => {
-    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
+    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn , b.cover_image from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
         if(err) return res.status(500).json({message: "Missing fields"})
 
         return res.status(200).json({ results});
