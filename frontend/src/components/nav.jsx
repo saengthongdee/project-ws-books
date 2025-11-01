@@ -55,7 +55,7 @@ export default function Nav() {
         </button>
 
         <button
-          onClick={() => handleSelec("return")}
+          onClick={() => handleSelec("returnbooks")}
           className="flex items-center gap-3 px-4 py-2 border border-white/30 rounded-lg text-white hover:bg-white/20 hover:border-white/60 transition-all duration-200"
         >
           <RotateCcw className="w-5 h-5" />

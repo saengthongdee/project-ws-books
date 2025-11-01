@@ -1,0 +1,182 @@
+[
+  {
+    "request_id": "1",
+    "user_id": "640710752",
+    "book_id": "105",
+    "request_date": "2025-10-25",
+    "approve_date": "2025-10-26",
+    "return_date": "2025-11-10",
+    "status": "approved"
+  },
+  {
+    "request_id": "2",
+    "user_id": "640710753",
+    "book_id": "101",
+    "request_date": "2025-10-26",
+    "approve_date": "2025-10-27",
+    "return_date": "2025-11-11",
+    "status": "approved"
+  },
+  {
+    "request_id": "3",
+    "user_id": "640710754",
+    "book_id": "107",
+    "request_date": "2025-10-26",
+    "approve_date": "2025-10-27",
+    "return_date": "2025-11-11",
+    "status": "approved"
+  },
+  {
+    "request_id": "4",
+    "user_id": "640710755",
+    "book_id": "110",
+    "request_date": "2025-10-27",
+    "approve_date": "2025-10-28",
+    "return_date": "2025-11-12",
+    "status": "approved"
+  },
+  {
+    "request_id": "5",
+    "user_id": "640710756",
+    "book_id": "102",
+    "request_date": "2025-10-27",
+    "approve_date": "2025-10-28",
+    "return_date": "2025-11-12",
+    "status": "approved"
+  },
+  {
+    "request_id": "6",
+    "user_id": "640710757",
+    "book_id": "103",
+    "request_date": "2025-10-28",
+    "approve_date": "2025-10-29",
+    "return_date": "2025-11-13",
+    "status": "approved"
+  },
+  {
+    "request_id": "7",
+    "user_id": "640710758",
+    "book_id": "108",
+    "request_date": "2025-10-28",
+    "approve_date": "2025-10-29",
+    "return_date": "2025-11-13",
+    "status": "approved"
+  },
+  {
+    "request_id": "8",
+    "user_id": "640710759",
+    "book_id": "104",
+    "request_date": "2025-10-29",
+    "approve_date": "2025-10-30",
+    "return_date": "2025-11-14",
+    "status": "approved"
+  },
+  {
+    "request_id": "9",
+    "user_id": "640710760",
+    "book_id": "109",
+    "request_date": "2025-10-29",
+    "approve_date": "2025-10-30",
+    "return_date": "2025-11-14",
+    "status": "approved"
+  },
+  {
+    "request_id": "10",
+    "user_id": "640710761",
+    "book_id": "106",
+    "request_date": "2025-10-30",
+    "approve_date": "2025-10-31",
+    "return_date": "2025-11-15",
+    "status": "approved"
+  },
+  {
+    "request_id": "11",
+    "user_id": "640710762",
+    "book_id": "111",
+    "request_date": "2025-10-31",
+    "approve_date": "2025-11-01",
+    "return_date": "2025-11-16",
+    "status": "approved"
+  },
+  {
+    "request_id": "12",
+    "user_id": "640710763",
+    "book_id": "112",
+    "request_date": "2025-11-01",
+    "approve_date": "2025-11-02",
+    "return_date": "2025-11-17",
+    "status": "approved"
+  },
+  {
+    "request_id": "13",
+    "user_id": "640710764",
+    "book_id": "113",
+    "request_date": "2025-11-01",
+    "approve_date": "2025-11-02",
+    "return_date": "2025-11-17",
+    "status": "approved"
+  },
+  {
+    "request_id": "14",
+    "user_id": "640710765",
+    "book_id": "114",
+    "request_date": "2025-11-02",
+    "approve_date": "2025-11-03",
+    "return_date": "2025-11-18",
+    "status": "approved"
+  },
+  {
+    "request_id": "15",
+    "user_id": "640710766",
+    "book_id": "115",
+    "request_date": "2025-11-02",
+    "approve_date": "2025-11-03",
+    "return_date": "2025-11-18",
+    "status": "approved"
+  },
+  {
+    "request_id": "16",
+    "user_id": "640710767",
+    "book_id": "116",
+    "request_date": "2025-11-03",
+    "approve_date": "2025-11-04",
+    "return_date": "2025-11-19",
+    "status": "approved"
+  },
+  {
+    "request_id": "17",
+    "user_id": "640710768",
+    "book_id": "117",
+    "request_date": "2025-11-03",
+    "approve_date": "2025-11-04",
+    "return_date": "2025-11-19",
+    "status": "approved"
+  },
+  {
+    "request_id": "18",
+    "user_id": "640710769",
+    "book_id": "118",
+    "request_date": "2025-11-04",
+    "approve_date": "2025-11-05",
+    "return_date": "2025-11-20",
+    "status": "approved"
+  },
+  {
+    "request_id": "19",
+    "user_id": "640710770",
+    "book_id": "119",
+    "request_date": "2025-11-04",
+    "approve_date": "2025-11-05",
+    "return_date": "2025-11-20",
+    "status": "approved"
+  },
+  {
+    "request_id": "20",
+    "user_id": "640710771",
+    "book_id": "120",
+    "request_date": "2025-11-05",
+    "approve_date": "2025-11-06",
+    "return_date": "2025-11-21",
+    "status": "approved"
+  }
+]
