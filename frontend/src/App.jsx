@@ -8,6 +8,8 @@ import Home from "./page/user/home";
 import Approve from "./page/admin/approve";
 import ReturnBooks from "./page/admin/returnbooks";
 import Dashboard from "./page/admin/home";
+import ChangPassword from "./page/user/changpassword";
+import HistoryBooks from "./page/user/historybooks";
  
 function App() {
 
@@ -22,6 +24,8 @@ function App() {
           <Route path='approve' element={<Approve/>}/>
           <Route path='returnbooks' element={<ReturnBooks/>}/>
           <Route path='dashboard' element={<Dashboard/>}/>
+          <Route path='changpassword' element={<ChangPassword/>}/>
+          <Route path='historybooks' element={<HistoryBooks/>}/>
         </Routes>
       </div>
     </Router>
