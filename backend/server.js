@@ -50,6 +50,44 @@ app.post('/login' , (req ,res) => {
     )
 })
 
+app.post('/changepassword', async (req, res) => {
+  const { oldPassword, newPassword, username } = req.body;
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(username);
+  if (!oldPassword || !newPassword || !username)
+    return res.status(400).json({ message: 'Missing fields' });
+
+  try {
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error' });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+
+      const user = results[0];
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch)
+        return res.status(401).json({ success: false, message: 'รหัสผ่านเก่าไม่ถูกต้อง' });
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      db.query(
+        'UPDATE users SET password = ? WHERE username = ?',
+        [hashedPassword, username],
+        (err2, result) => {
+          if (err2) return res.status(500).json({ message: 'Database update error' });
+
+          return res.json({ success: true, message: 'เปลี่ยนรหัสผ่านสำเร็จ เรากำลังจะพาคุณไปหน้าหลัก' });
+        }
+      );
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
 app.get('/books' , (req, res) => {
     db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn , b.cover_image from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
         if(err) return res.status(500).json({message: "Missing fields"})

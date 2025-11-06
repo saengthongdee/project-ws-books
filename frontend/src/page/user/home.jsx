@@ -7,7 +7,6 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ทั้งหมด");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage, setBooksPerPage] = useState(20);
 
@@ -85,13 +84,13 @@ function Home() {
         </div>
 
         <div className="w-7xl flex justify-end p-4">
-          <div className="mb-0"> {/* ลบ margin-bottom เพื่อจัดในบรรทัดเดียว */}
+          <div className="mb-0">
             <label className="mr-2 text-sm font-medium">แสดงต่อหน้า : </label>
             <select
               value={booksPerPage}
               onChange={(e) => {
                 setBooksPerPage(Number(e.target.value));
-                setCurrentPage(1); // reset หน้าแรก
+                setCurrentPage(1);
               }}
               className="border rounded p-1"
             >
@@ -105,46 +104,46 @@ function Home() {
 
         {/* Books Grid */}
         <div className="w-full max-w-7xl grid grid-cols-5 gap-3 mb-4">
-  {currentBooks.map((book) => (
-    <div
-      key={book.book_id}
-      className="bg-white rounded-xl shadow overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300"
-    >
-      <div className="w-full h-80 bg-gray-50 p-4 flex items-center justify-center">
-        {book.cover_image ? (
-          <div className="w-full h-full flex items-center justify-center">
-            <img
-              src={book.cover_image}
-              alt={book.title}
-              className="max-w-full max-h-full w-auto h-auto object-contain drop-shadow-2xl rounded-sm"
-              style={{
-                filter: 'drop-shadow(8px 8px 12px rgba(0, 0, 0, 0.3))'
-              }}
-            />
-          </div>
-        ) : (
-          <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
-            <div className="flex flex-col items-center justify-center text-slate-400">
-              <BookOpen size={48} className="mb-3 opacity-50" />
-              <p className="text-sm font-medium">
-                ไม่พบรูปภาพหนังสือ
-              </p>
+          {currentBooks.map((book) => (
+            <div
+              key={book.book_id}
+              className="bg-white rounded-xl shadow overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300"
+            >
+              <div className="w-full h-80 bg-gray-50 p-4 flex items-center justify-center">
+                {book.cover_image ? (
+                  <div className="w-full h-full flex items-center justify-center">
+                    <img
+                      src={book.cover_image}
+                      alt={book.title}
+                      className="max-w-full max-h-full w-auto h-auto object-contain drop-shadow-2xl rounded-sm"
+                      style={{
+                        filter: 'drop-shadow(8px 8px 12px rgba(0, 0, 0, 0.3))'
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg">
+                    <div className="flex flex-col items-center justify-center text-slate-400">
+                      <BookOpen size={48} className="mb-3 opacity-50" />
+                      <p className="text-sm font-medium">
+                        ไม่พบรูปภาพหนังสือ
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div className="p-3 flex flex-col gap-1">
+                <h2 className="font-semibold text-lg truncate">{book.title}</h2>
+                <p className="font-semibold text-sm text-gray-600 truncate">ผู้แต่ง : {book.author}</p>
+                <p className="mt-1 text-green-600 text-xs">
+                  {book.available > 0
+                    ? `พร้อมยืม ${book.available} เล่ม ✅`
+                    : "ไม่พร้อมยืม ❌"}
+                </p>
+              </div>
             </div>
-          </div>
-        )}
-      </div>
-      <div className="p-3 flex flex-col gap-1">
-        <h2 className="font-semibold text-lg truncate">{book.title}</h2>
-        <p className="font-semibold text-sm text-gray-600 truncate">ผู้แต่ง : {book.author}</p>
-        <p className="mt-1 text-green-600 text-xs">
-          {book.available > 0
-            ? `พร้อมยืม ${book.available} เล่ม ✅`
-            : "ไม่พร้อมยืม ❌"}
-        </p>
-      </div>
-    </div>
-  ))}
-</div>
+          ))}
+        </div>
 
         {/* Pagination Buttons */}
         <div className="flex gap-2 mb-6 pt-6">
