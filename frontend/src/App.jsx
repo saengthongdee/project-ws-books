@@ -8,7 +8,7 @@ import Home from "./page/user/home";
 import Approve from "./page/admin/approve";
 import ReturnBooks from "./page/admin/returnbooks";
 import Dashboard from "./page/admin/home";
- 
+import BookDetail from "./page/user/BookDetail";
 function App() {
 
   return (
@@ -22,6 +22,8 @@ function App() {
           <Route path='approve' element={<Approve/>}/>
           <Route path='returnbooks' element={<ReturnBooks/>}/>
           <Route path='dashboard' element={<Dashboard/>}/>
+          <Route path="/book/:id" element={<BookDetail />} />
+          <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       </div>
     </Router>

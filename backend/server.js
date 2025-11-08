@@ -5,59 +5,77 @@ const jwt = require('jsonwebtoken');
 const app = express();
 
 require('dotenv').config();
-
 const db = require('./db');
 
 app.use(express.json());
 app.use(cors());
 
-app.get('/', (req , res) => {
-    res.json({message: 'welcome to server'})
+app.get('/', (req, res) => {
+    res.json({ message: 'welcome to server' })
 });
 
-app.post('/login' , (req ,res) => {
-    const { username , password} = req.body;
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
 
-    if(!username || !password) return res.status(400).json({message: "Missing fields"});
+    if (!username || !password) return res.status(400).json({ message: "Missing fields" });
 
     db.query(
-        'select * from users where username = ?', [username] , async (error, results) => {
+        'select * from users where username = ?', [username], async (error, results) => {
 
             if (error) return res.status(500).json({ message: 'Database error' });
             if (results.length === 0) return res.status(401).json({ message: 'User not found' });
 
             const user = results[0];
             const isMatch = await bcrypt.compare(password, user.password);
-            
+
             if (!isMatch) return res.status(401).json({ message: 'Invalid password' });
 
             const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-            
-            res.json(
-                { 
-                    message: 'Login successful',
-                    token,
-                    user: {
-                        username: user.username,
-                        role: user.role,
-                        user_id: user.user_id,
-                        fullname: user.fullname,
-                        email: user.email
-                    } 
-                });
 
+            res.json({
+                message: 'Login successful',
+                token,
+                user: {
+                    username: user.username,
+                    role: user.role,
+                    user_id: user.user_id,
+                    fullname: user.fullname,
+                    email: user.email
+                }
+            });
         }
     )
-})
+});
 
-app.get('/books' , (req, res) => {
-    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn , b.cover_image from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
-        if(err) return res.status(500).json({message: "Missing fields"})
-
-        return res.status(200).json({ results});
+app.get('/books', (req, res) => {
+    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn , b.cover_image from books b join categories c on b.category_id = c.category_id;', (err, results) => {
+        if (err) return res.status(500).json({ message: "Missing fields" })
+        return res.status(200).json({ results });
     })
-})
+});
 
-app.listen(process.env.PORT , () => {
+// ✅ เพิ่มตรงนี้
+app.get('/books/:id', (req, res) => {
+    const { id } = req.params;
+
+    const sql = `
+        SELECT b.book_id, b.title, b.author, b.isbn,
+                b.cover_image, b.description,
+                b.total_quantity, b.available,
+                c.category_name
+        FROM books b
+        LEFT JOIN categories c ON b.category_id = c.category_id
+        WHERE b.book_id = ?;
+    `;
+
+    db.query(sql, [id], (err, rows) => {
+        if (err) return res.status(500).json({ message: 'Database error' });
+        if (rows.length === 0) return res.status(404).json({ message: 'Book not found' });
+
+        return res.status(200).json({ result: rows[0] });
+    });
+});
+
+app.listen(process.env.PORT, () => {
     console.log(`server is running on port 1 ${process.env.PORT}`);
-})
+});
