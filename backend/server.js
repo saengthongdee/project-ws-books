@@ -50,14 +50,123 @@ app.post('/login' , (req ,res) => {
     )
 })
 
-app.get('/books' , (req, res) => {
-    db.query('select b.book_id , b.title ,b.author, c.category_name , b.available , b.isbn , b.cover_image from books b join categories c on b.category_id = c.category_id;' , (err , results) => {
-        if(err) return res.status(500).json({message: "Missing fields"})
+app.post('/changepassword', async (req, res) => {
+  const { oldPassword, newPassword, username } = req.body;
+    console.log(oldPassword);
+    console.log(newPassword);
+    console.log(username);
+  if (!oldPassword || !newPassword || !username)
+    return res.status(400).json({ message: 'Missing fields' });
 
-        return res.status(200).json({ results});
-    })
+  try {
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+      if (err) return res.status(500).json({ message: 'Database error' });
+      if (results.length === 0) return res.status(404).json({ message: 'User not found' });
+
+      const user = results[0];
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch)
+        return res.status(401).json({ success: false, message: 'รหัสผ่านเก่าไม่ถูกต้อง' });
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      db.query(
+        'UPDATE users SET password = ? WHERE username = ?',
+        [hashedPassword, username],
+        (err2, result) => {
+          if (err2) return res.status(500).json({ message: 'Database update error' });
+
+          return res.json({ success: true, message: 'เปลี่ยนรหัสผ่านสำเร็จ เรากำลังจะพาคุณไปหน้าหลัก' });
+        }
+      );
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+app.get('/books' , (req, res) => {
+    const query = `
+      SELECT b.book_id, b.title, b.author, c.category_name, b.available, b.isbn, b.cover_image 
+      FROM books b 
+      JOIN categories c ON b.category_id = c.category_id
+      ORDER BY b.book_id ASC;  
+    `; // <-- เพิ่ม ORDER BY ตรงนี้
+
+    db.query(query , (err , results) => { // <-- เปลี่ยนมาใช้ตัวแปร query
+        if(err) return res.status(500).json({message: "Missing fields"})
+
+        return res.status(200).json({ results});
+    })
 })
 
+// CREATE a new book
+app.post('/books', (req, res) => {
+  const { title, author, category_id, quantity, isbn, description, cover_image } = req.body;
+
+  // ตรวจสอบข้อมูลเบื้องต้น
+  if (!title || !author || !category_id || !quantity || !isbn) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
+  const query = `
+    INSERT INTO books (title, author, category_id, total_quantity, available, isbn, description, cover_image) 
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+  `;
+  
+  // ให้ total_quantity และ available มีค่าเท่ากับ quantity ที่ส่งมา
+  const values = [title, author, category_id, quantity, quantity, isbn, description, cover_image];
+
+  db.query(query, values, (err, results) => {
+    if (err) {
+      console.error('Error creating book:', err);
+      return res.status(500).json({ message: 'Database error', error: err });
+    }
+    // ส่งข้อมูลหนังสือที่เพิ่งสร้างกลับไป (รวมถึง ID ใหม่)
+    res.status(201).json({ message: 'Book created successfully', bookId: results.insertId });
+  });
+});
+
+// DELETE a book by id
+app.delete('/books/:id', (req, res) => {
+  const bookId = req.params.id;
+
+  if (!bookId) {
+    return res.status(400).json({ message: "Missing book ID" });
+  }
+
+  // !!! สำคัญ: ต้องลบข้อมูลที่อ้างอิงใน borrow_requests ก่อน
+  const deleteRequestsQuery = 'DELETE FROM borrow_requests WHERE book_id = ?';
+  
+  db.query(deleteRequestsQuery, [bookId], (err, results) => {
+    if (err) {
+      console.error('Error deleting borrow_requests:', err);
+      return res.status(500).json({ message: 'Database error', error: err });
+    }
+
+    // หลังจากลบ borrow_requests แล้ว ก็ลบหนังสือ
+    const deleteBookQuery = 'DELETE FROM books WHERE book_id = ?';
+    db.query(deleteBookQuery, [bookId], (err, results) => {
+      if (err) {
+        console.error('Error deleting book:', err);
+        return res.status(500).json({ message: 'Database error', error: err });
+      }
+
+      if (results.affectedRows === 0) {
+        return res.status(404).json({ message: 'Book not found' });
+      }
+
+      res.status(200).json({ message: 'Book deleted successfully' });
+    });
+  });
+});
+
+
+
+
 app.listen(process.env.PORT , () => {
-    console.log(`server is running on port ${process.env.PORT}`);
+    console.log(`server is running on port  ${process.env.PORT}`);
 })
