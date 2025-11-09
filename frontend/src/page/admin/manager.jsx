@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Nav from "../../components/nav";
 import { BookText, Plus, Search, BookOpen, Filter } from 'lucide-react';
@@ -11,16 +11,16 @@ function Manager() {
   const [category, setCategory] = useState('ทั้งหมด');
   const [books, setBooks] = useState([]);
   const [allbooks, setAllbooks] = useState([]);
-  const [avtiveCreate  , setActiveCreate] = useState(false);
+  const [avtiveCreate, setActiveCreate] = useState(false);
 
   //state creaet 
-  const [title_create , setTitle] = useState('');
-  const [author_create , setAuthor] = useState('');
-  const [category_create , setcategory] = useState('');
-  const [quantity_create , setQuantity] = useState(1);
-  const [isbn_create , setIsbn] = useState('');
-  const [description_create , setDescription] = useState('');
-  const [image_create , setImage] = useState('');
+  const [title_create, setTitle] = useState('');
+  const [author_create, setAuthor] = useState('');
+  const [category_create, setcategory] = useState('');
+  const [quantity_create, setQuantity] = useState(1);
+  const [isbn_create, setIsbn] = useState('');
+  const [description_create, setDescription] = useState('');
+  const [image_create, setImage] = useState('');
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -30,39 +30,66 @@ function Manager() {
     }
   }, [user, navigate]);
 
-  const handleCreate = () => {
-      
-    if( !title_create?.trim() || !author_create?.trim() || 
-        !category_create?.trim() || !quantity_create?.trim() ||
-        !isbn_create?.trim() || !description_create?.trim() || 
-        !image_create?.trim()) 
-      return;
-
-    setActiveCreate(false);
-
-    setTitle('');
-    setAuthor('');
-    setcategory('');
-    setQuantity('');
-    setIsbn('');
-    setDescription('');
-    setImage('');
+  // 1. แยกฟังก์ชันสำหรับดึงข้อมูล
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/books');
+      if (response.status === 200) {
+        setBooks(response.data.results);
+        setAllbooks(response.data.results);
+      }
+    } catch (error) {
+      console.log('fetching error', error);
+    }
   }
 
+  // 2. เรียกใช้ fetchBooks เมื่อ component โหลด
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/books');
-        if (response.status === 200) {
-          setBooks(response.data.results);
-          setAllbooks(response.data.results);
-        }
-      } catch (error) {
-        console.log('fetching error', error);
-      }
-    }
-    fetchData();
+    fetchBooks();
   }, []);
+
+  // 3. ปรับปรุง handleCreate ให้ยิง API
+  const handleCreate = async () => {
+    // ตรวจสอบข้อมูล
+    if (!title_create?.trim() || !author_create?.trim() ||
+      !category_create?.trim() || !quantity_create || // แก้ไขการตรวจสอบ quantity
+      !isbn_create?.trim() || !description_create?.trim() ||
+      !image_create?.trim())
+      return; // ถ้าไม่ผ่าน ไม่ต้องทำอะไร
+
+    const newBook = {
+      title: title_create,
+      author: author_create,
+      category_id: category_create, // ส่งเป็น category_id
+      quantity: quantity_create,
+      isbn: isbn_create,
+      description: description_create,
+      cover_image: image_create
+    };
+
+    try {
+      // ยิง API
+      const response = await axios.post('http://localhost:3000/books', newBook);
+
+      if (response.status === 201) { // 201 = Created
+        setActiveCreate(false); // ปิด Modal
+
+        // ล้างฟอร์ม
+        setTitle('');
+        setAuthor('');
+        setcategory('');
+        setQuantity(1); // ตั้งค่ากลับเป็น 1
+        setIsbn('');
+        setDescription('');
+        setImage('');
+
+        // ดึงข้อมูลหนังสือมาใหม่ทั้งหมด
+        fetchBooks();
+      }
+    } catch (error) {
+      console.error('Error creating book:', error);
+    }
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -75,12 +102,10 @@ function Manager() {
     let filtered = allbooks;
 
     if (debounce) {
-
-      const searchKeys = ["book_id", "title", "author", "category_name" , "isbn"];
-
+      const searchKeys = ["book_id", "title", "author", "category_name", "isbn"];
       filtered = filtered.filter(book => searchKeys.some(key =>
-          book[key]?.toString().toLowerCase().includes(debounce.toLowerCase())
-        )
+        book[key]?.toString().toLowerCase().includes(debounce.toLowerCase())
+      )
       );
     }
 
@@ -92,18 +117,31 @@ function Manager() {
   }, [debounce, category, allbooks]);
 
 
-  const handleDelete = (id) => {
+  // 4. ปรับปรุง handleDelete ให้ยิง API
+  const handleDelete = async (id) => {
+    // (Optional: เพิ่มการยืนยันก่อนลบ)
+    // if (!window.confirm("คุณต้องการลบหนังสือเล่มนี้จริงหรือไม่?")) {
+    //   return;
+    // }
 
-      setBooks(prev =>{ return prev.filter(book => book.book_id != id);});
-      setAllbooks(prev => prev.filter(book => book.book_id !== id));
+    try {
+      const response = await axios.delete(`http://localhost:3000/books/${id}`);
+
+      if (response.status === 200) {
+        // ถ้าลบสำเร็จ ให้ดึงข้อมูลหนังสือมาใหม่ทั้งหมด
+        fetchBooks();
+      }
+    } catch (error) {
+      console.error('Error deleting book:', error);
+    }
   }
 
 
 
   return (
     <div className="w-screen h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex">
-      <Nav />  
-      
+      <Nav />
+
       <div className="flex-1 relative flex flex-col h-screen overflow-hidden">
         {/* Header Section */}
         <div className="bg-white border-b border-slate-200 shadow-sm">
@@ -114,7 +152,7 @@ function Manager() {
                   <h1 className="text-2xl font-bold text-[#41826e]">ระบบจัดการหนังสือ</h1>
                   <p className="text-sm text-slate-500">ห้องสมุดมหาวิทยาลัยศิลปากร</p>
                 </div>
-              </div>  
+              </div>
             </div>
 
             {/* Search and Filter Bar */}
@@ -149,69 +187,69 @@ function Manager() {
                 </select>
               </div>
 
-              <button onClick={() => setActiveCreate(true)} className="bg-[#41826e] text-sm  text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:from-indigo-700 hover:to-blue-600 transition-all shadow-md hover:shadow-lg">
+              <button onClick={() => setActiveCreate(true)} className="bg-[#41826e] text-sm  text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:from-indigo-700 hover:to-blue-600 transition-all shadow-md hover:shadow-lg">
                 <Plus size={20} /> <span className="font-medium">เพิ่มหนังสือ</span>
               </button>
 
-            {avtiveCreate && (
-              <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[999]">
-                <div className="bg-white w-200 max-w-[90%]  rounded-xl shadow-lg p-6 animate-fadeIn">
-                  <h1 className="text-2xl font-bold mb-4 text-center text-[#1e293b]">สร้างหนังสือใหม่</h1>
-                  
-                  <div className="space-y-3 flex flex-col gap-6">
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อหนังสือ</label>
-                      <input required value={title_create} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+              {avtiveCreate && (
+                <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[999]">
+                  <div className="bg-white w-200 max-w-[90%]  rounded-xl shadow-lg p-6 animate-fadeIn">
+                    <h1 className="text-2xl font-bold mb-4 text-center text-[#1e293b]">สร้างหนังสือใหม่</h1>
+
+                    <div className="space-y-3 flex flex-col gap-6">
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อหนังสือ</label>
+                        <input required value={title_create} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
+
+                      <div className="flex flex-col">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อผู้แต่ง</label>
+                        <input required value={author_create} onChange={(e) => setAuthor(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">หมวดหมู่</label>
+                        <select required value={category_create} onChange={(e) => setcategory(e.target.value)} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none">
+                          <option value="">เลือกหมวดหมู่</option>
+                          <option value="1">นิยาย</option>
+                          <option value="2">วิทยาศาสตร์</option>
+                          <option value="3">ประวัติศาสตร์</option>
+                          <option value="4">จิตวิทยา</option>
+                          <option value="5">เทคโนโลยี</option>
+                          <option value="6">ธุรกิจและการเงิน</option>
+                          <option value="7">ศิลปะและวัฒนธรรม</option>
+                          <option value="8">การพัฒนาตนเอง</option>
+                        </select>
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">จำนวนหนังสือ</label>
+                        <input required value={quantity_create} onChange={(e) => setQuantity(e.target.value)} type="number" min={1} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">ISBN</label>
+                        <input required value={isbn_create} onChange={(e) => setIsbn(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">รายละเอียด</label>
+                        <input required value={description_create} onChange={(e) => setDescription(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2  text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
+
+                      <div className="flex flex-col gap-1">
+                        <label className="block text-sm font-semibold text-gray-700 mb-1">รูปภาพ (URL)</label>
+                        <input required value={image_create} onChange={(e) => setImage(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                      </div>
                     </div>
 
-                    <div  className="flex flex-col">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อผู้แต่ง</label>
-                      <input required value={author_create} onChange={(e) => setAuthor(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                    <div className="flex justify-center items-center gap-3 pt-6">
+                      <button className="w-1/2 px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition" onClick={() => setActiveCreate(false)}> ยกเลิก </button>
+                      <button onClick={handleCreate} className="w-1/2 px-4 py-2 rounded-md bg-[#41826e] text-white hover:bg-[#224e41] transition">ตกลง</button>
                     </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">หมวดหมู่</label>
-                      <select required value={category_create} onChange={(e) => setcategory(e.target.value)} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none">
-                        <option value="">เลือกหมวดหมู่</option>
-                        <option value="1">นิยาย</option>
-                        <option value="2">วิทยาศาสตร์</option>
-                        <option value="3">ประวัติศาสตร์</option>
-                        <option value="4">จิตวิทยา</option>
-                        <option value="5">เทคโนโลยี</option>
-                        <option value="6">ธุรกิจและการเงิน</option>
-                        <option value="7">ศิลปะและวัฒนธรรม</option>
-                        <option value="8">การพัฒนาตนเอง</option>
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">จำนวนหนังสือ</label>
-                      <input required value={quantity_create} onChange={(e) => setQuantity(e.target.value)} type="number" min={1} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">ISBN</label>
-                      <input required value={isbn_create} onChange={(e) => setIsbn(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">รายละเอียด</label>
-                      <input required value={description_create} onChange={(e) => setDescription(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2  text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
-                    </div>
-
-                    <div className="flex flex-col gap-1">
-                      <label className="block text-sm font-semibold text-gray-700 mb-1">รูปภาพ (URL)</label>
-                      <input required value={image_create} onChange={(e) => setImage(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center items-center gap-3 pt-6">
-                    <button className="w-1/2 px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition" onClick={() => setActiveCreate(false)}> ยกเลิก </button>
-                    <button onClick={handleCreate} className="w-1/2 px-4 py-2 rounded-md bg-[#41826e] text-white hover:bg-[#224e41] transition">ตกลง</button>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
@@ -235,8 +273,9 @@ function Manager() {
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100">
                   {books.length > 0 ? (
-                    books.map((book, index) => (
-                      <tr key={index} className="hover:bg-blue-50 transition-all cursor-pointer ">
+                    // 5. แก้ไข key ให้ใช้ book.book_id
+                    books.map((book) => (
+                      <tr key={book.book_id} className="hover:bg-blue-50 transition-all cursor-pointer ">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm font-mono font-semibold text-black/60">
                             {book.book_id}
@@ -265,14 +304,14 @@ function Manager() {
                             {book.available} เล่ม
                           </span>
                         </td>
-                        <td  className="px-6 py-4 whitespace-nowrap text-sm  flex justify-center text-center z-99">
-                           <div onClick={() => handleDelete(book.book_id)} className="border px-5 p-1 bg-red-400 hover:bg-red-600 text-white rounded-md border-transparent">ลบ</div>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm  flex justify-center text-center z-99">
+                          <div onClick={() => handleDelete(book.book_id)} className="border px-5 p-1 bg-red-400 hover:bg-red-600 text-white rounded-md border-transparent">ลบ</div>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="px-6 py-12 text-center">
+                      <td colSpan="7" className="px-6 py-12 text-center"> {/* แก้ colSpan เป็น 7 */}
                         <div className="flex flex-col items-center justify-center text-slate-400">
                           <BookOpen size={48} className="mb-3 opacity-50" />
                           <p className="text-sm font-medium">ไม่พบข้อมูลหนังสือ</p>
