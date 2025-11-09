@@ -1,26 +1,55 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react"; // 1. เพิ่ม useMemo, useCallback
 import { useNavigate } from "react-router-dom";
 import Nav from "../../components/nav";
 import { BookText, Plus, Search, BookOpen, Filter } from "lucide-react";
 import axios from "axios";
-import data from "../../../list.json";
+// import data from "../../../list.json"; // 2. ลบข้อมูลปลอมทิ้ง
+
+// 3. กำหนด API URL
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function Dashboard() {
   const navigate = useNavigate();
   const [debounce, setDebounce] = useState("");
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ทั้งหมด");
-  const [list, setList] = useState(data);
-  const [allList, setAllList] = useState(data);
+  
+  // 4. ตั้งค่าเริ่มต้นเป็น Array ว่าง
+  const [list, setList] = useState([]);
+  const [allList, setAllList] = useState([]);
+  const [loading, setLoading] = useState(true); // 5. เพิ่ม state สำหรับ loading
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // 6. ⬇️ FIX: ใช้ useMemo เพื่อให้ user, token "คงที่"
+  const user = useMemo(() => JSON.parse(localStorage.getItem("user")), []);
+  const token = useMemo(() => localStorage.getItem('token'), []);
 
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
+  // 7. ⬇️ FIX: สร้างฟังก์ชันดึงข้อมูลจาก API
+  const fetchDashboardData = useCallback(async () => {
+    setLoading(true);
+    try {
+      // 8. ⬇️ FIX: เรียก API /borrow-requests/all
+      const response = await axios.get(`${API_URL}/borrow-requests/all`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setAllList(response.data);
+      setList(response.data);
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [user, navigate]);
+  }, [token]); // ฟังก์ชันนี้ขึ้นอยู่กับ token
 
+  // 9. ⬇️ FIX: useEffect สำหรับ Auth Guard และดึงข้อมูล
+  useEffect(() => {
+    if (!user || !token) {
+      navigate("/login");
+    } else {
+      fetchDashboardData(); // ถ้า login แล้ว ให้ดึงข้อมูล
+    }
+  }, [user, token, navigate, fetchDashboardData]); // 10. เพิ่ม dependency
+
+  // useEffect สำหรับ Debounce (ดีอยู่แล้ว)
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebounce(search);
@@ -28,11 +57,13 @@ function Dashboard() {
     return () => clearTimeout(timer);
   }, [search]);
 
+  // useEffect สำหรับ Filter (ดีอยู่แล้ว)
   useEffect(() => {
     let filtered = allList;
 
     if (debounce) {
       const searchKeys = [
+        "request_id", // 11. แก้ไข field ที่ใช้ค้นหาให้ตรงกับ API
         "book_id",
         "title",
         "category_name",
@@ -53,11 +84,19 @@ function Dashboard() {
     setList(filtered);
   }, [debounce, category, allList]);
 
-  const handleDelete = (id) => {
-    setList((prev) => {
-      return prev.filter((list) => list.book_id != id);
+  // 12. ⬇️ (ลบฟังก์ชัน handleDelete ทิ้ง เพราะหน้านี้เป็น Dashboard ไม่ควรลบข้อมูล)
+  
+  // 13. ⬇️ FIX: เพิ่มฟังก์ชันจัดรูปแบบวันที่ (เหมือนหน้า approve)
+  const formatDate = (dateString) => {
+    if (!dateString) return "NaN"; // 14. แก้ไข "NaN" ให้สวยงาม
+    const date = new Date(dateString);
+    return date.toLocaleString('th-TH', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
-    setAllList((prev) => prev.filter((list) => list.book_id !== id));
   };
 
   return (
@@ -65,7 +104,7 @@ function Dashboard() {
       <Nav />
 
       <div className="flex-1 relative flex flex-col h-screen overflow-hidden">
-        {/* Header Section */}
+        {/* Header Section (เหมือนเดิม) */}
         <div className="bg-white border-b border-slate-200 shadow-sm">
           <div className="px-8 py-6">
             <div className="flex items-center justify-between mb-6">
@@ -81,7 +120,7 @@ function Dashboard() {
               </div>
             </div>
 
-            {/* Search and Filter Bar */}
+            {/* Search and Filter Bar (เหมือนเดิม) */}
             <div className="flex gap-4 pt-4 ">
               <div className="flex-1 relative">
                 <Search
@@ -129,6 +168,7 @@ function Dashboard() {
               <table className="min-w-full">
                 <thead className="bg-gradient-to-r from-slate-50 to-slate-100 sticky top-0 z-10">
                   <tr>
+                    {/* (ส่วนหัวตาราง เหมือนเดิม) */}
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">รหัสนักศึกษา</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">รหัสหนังสือ</th>
                     <th className="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider border-b border-slate-200">วันที่ร้องขอ</th>
@@ -139,15 +179,22 @@ function Dashboard() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100">
-                  {list.length > 0 ? (
-                    list.map((items, index) => (
+                  {/* 15. ⬇️ FIX: เพิ่ม Loading check */}
+                  {loading ? (
+                    <tr>
+                      <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
+                        กำลังโหลดข้อมูล...
+                      </td>
+                    </tr>
+                  ) : list.length > 0 ? (
+                    list.map((items) => ( // 16. ⬇️ FIX: ใช้ request_id เป็น key
                       <tr
-                        key={index}
+                        key={items.request_id} 
                         className="hover:bg-blue-50 transition-all cursor-pointer "
                       >
                         <td className="px-6 py-4">
                           <div className="flex items-center gap-3">
-                            <span className="text-sm  text-black/70">
+                            <span className="text-sm  text-black/70">
                               {items.user_id}
                             </span>
                           </div>
@@ -159,17 +206,17 @@ function Dashboard() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm text-black/70">
-                            {items.request_date}
+                            {formatDate(items.request_date)} {/* 17. ⬇️ FIX: ใช้ formatDate */}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm text-black/70">
-                            {items.approve_date ?? "NaN"}
+                            {formatDate(items.approve_date)} {/* 17. ⬇️ FIX: ใช้ formatDate */}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <span className="text-sm text-black/70">
-                            {items.return_date ?? "NaN"}
+                            {formatDate(items.due_date)} {/* 18. ⬇️ FIX: แก้ไขเป็น due_date */}
                           </span>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
@@ -194,6 +241,7 @@ function Dashboard() {
                                 : ""
                             }`}
                           >
+                            {/* (ส่วนนี้ดีอยู่แล้ว) */}
                             {items.status === "pending" && "รอดำเนินการ"}
                             {items.status === "approved" && "อนุมัติแล้ว"}
                             {items.status === "rejected" && "ไม่อนุมัติ"}
@@ -205,11 +253,12 @@ function Dashboard() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="5" className="px-6 py-12 text-center">
+                      {/* 19. ⬇️ FIX: แก้ไข colSpan ให้ถูกต้อง */}
+                      <td colSpan="7" className="px-6 py-12 text-center"> 
                         <div className="flex flex-col items-center justify-center text-slate-400">
                           <BookOpen size={48} className="mb-3 opacity-50" />
                           <p className="text-sm font-medium">
-                            ไม่พบข้อมูลหนังสือ
+                            ไม่พบข้อมูลคำร้อง
                           </p>
                           <p className="text-xs mt-1">
                             ลองค้นหาด้วยคำค้นอื่นหรือเปลี่ยนหมวดหมู่
