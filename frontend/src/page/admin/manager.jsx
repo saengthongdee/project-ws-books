@@ -187,29 +187,29 @@ function Manager() {
                 </select>
               </div>
 
-              <button onClick={() => setActiveCreate(true)} className="bg-[#41826e] text-sm  text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:from-indigo-700 hover:to-blue-600 transition-all shadow-md hover:shadow-lg">
+              <button onClick={() => setActiveCreate(true)} className="bg-[#41826e] text-sm text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:from-indigo-700 hover:to-blue-600 transition-all shadow-md hover:shadow-lg">
                 <Plus size={20} /> <span className="font-medium">เพิ่มหนังสือ</span>
               </button>
 
               {avtiveCreate && (
-                <div className="fixed inset-0 bg-black/40 flex justify-center items-center z-[999]">
-                  <div className="bg-white w-200 max-w-[90%]  rounded-xl shadow-lg p-6 animate-fadeIn">
+                <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-[999] ">
+                  <div className="bg-[#ffffff] border border-white w-200 max-w-[85%] rounded-xl shadow-lg p-6 animate-fadeIn">
                     <h1 className="text-2xl font-bold mb-4 text-center text-[#1e293b]">สร้างหนังสือใหม่</h1>
 
                     <div className="space-y-3 flex flex-col gap-6">
                       <div className="flex flex-col gap-1">
-                        <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อหนังสือ</label>
-                        <input required value={title_create} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <label className="block text-sm font-semibold text-gray-700 mb-1 ">ชื่อหนังสือ</label>
+                        <input required value={title_create} onChange={(e) => setTitle(e.target.value)} type="text" className="w-full border border-black/40 rounded-md shadow-md shadow-black/20 p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
                       </div>
 
                       <div className="flex flex-col">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">ชื่อผู้แต่ง</label>
-                        <input required value={author_create} onChange={(e) => setAuthor(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <input required value={author_create} onChange={(e) => setAuthor(e.target.value)} type="text" className="w-full border border-black/40 rounded-md  shadow-md shadow-black/20 p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
                       </div>
 
                       <div className="flex flex-col gap-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">หมวดหมู่</label>
-                        <select required value={category_create} onChange={(e) => setcategory(e.target.value)} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none">
+                        <select required value={category_create} onChange={(e) => setcategory(e.target.value)} className="w-full border border-black/40 rounded-md p-2 text-sm shadow-md shadow-black/20 focus:ring-1 focus:ring-[#41826e] outline-none">
                           <option value="">เลือกหมวดหมู่</option>
                           <option value="1">นิยาย</option>
                           <option value="2">วิทยาศาสตร์</option>
@@ -224,27 +224,27 @@ function Manager() {
 
                       <div className="flex flex-col gap-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">จำนวนหนังสือ</label>
-                        <input required value={quantity_create} onChange={(e) => setQuantity(e.target.value)} type="number" min={1} className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <input required value={quantity_create} onChange={(e) => setQuantity(e.target.value)} type="number" min={1} className="w-full border border-black/40 shadow-md shadow-black/20 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
                       </div>
 
                       <div className="flex flex-col gap-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">ISBN</label>
-                        <input required value={isbn_create} onChange={(e) => setIsbn(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <input required value={isbn_create} onChange={(e) => setIsbn(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 shadow-md shadow-black/20 focus:ring-[#41826e] outline-none" />
                       </div>
 
                       <div className="flex flex-col gap-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">รายละเอียด</label>
-                        <input required value={description_create} onChange={(e) => setDescription(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2  text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <input required value={description_create} onChange={(e) => setDescription(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2  text-sm shadow-md shadow-black/20 focus:ring-1 focus:ring-[#41826e] outline-none" />
                       </div>
 
                       <div className="flex flex-col gap-1">
                         <label className="block text-sm font-semibold text-gray-700 mb-1">รูปภาพ (URL)</label>
-                        <input required value={image_create} onChange={(e) => setImage(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 focus:ring-[#41826e] outline-none" />
+                        <input required value={image_create} onChange={(e) => setImage(e.target.value)} type="text" className="w-full border border-black/40 rounded-md p-2 text-sm focus:ring-1 shadow-md shadow-black/20 focus:ring-[#41826e] outline-none" />
                       </div>
                     </div>
 
                     <div className="flex justify-center items-center gap-3 pt-6">
-                      <button className="w-1/2 px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 transition" onClick={() => setActiveCreate(false)}> ยกเลิก </button>
+                      <button className="w-1/2 px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 shadow-lg shadow-black/20 transition" onClick={() => setActiveCreate(false)}> ยกเลิก </button>
                       <button onClick={handleCreate} className="w-1/2 px-4 py-2 rounded-md bg-[#41826e] text-white hover:bg-[#224e41] transition">ตกลง</button>
                     </div>
                   </div>
@@ -273,7 +273,7 @@ function Manager() {
                 </thead>
                 <tbody className="bg-white divide-y divide-slate-100">
                   {books.length > 0 ? (
-                    // 5. แก้ไข key ให้ใช้ book.book_id
+
                     books.map((book) => (
                       <tr key={book.book_id} className="hover:bg-blue-50 transition-all cursor-pointer ">
                         <td className="px-6 py-4 whitespace-nowrap">
