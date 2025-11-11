@@ -404,7 +404,7 @@ app.post('/borrow-requests', (req, res) => {
     return res.status(400).json({ message: "Missing book_id or user_id" });
   }
 
-  const checkLimitQuery = "SELECT COUNT(*) as activeBorrows FROM borrow_requests WHERE user_id = ? AND status = 'pending'";
+  const checkLimitQuery = "SELECT COUNT(*) as activeBorrows FROM borrow_requests WHERE user_id = ? AND status IN ('pending', 'approved')";
 
   db.query(checkLimitQuery, [user_id], (err, limitResults) => {
     if (err) {
@@ -414,7 +414,6 @@ app.post('/borrow-requests', (req, res) => {
 
     const activeBorrows = limitResults[0].activeBorrows;
     if (activeBorrows >= 3) {
-      // ------------------------------------------------
       return res.status(409).json({
         message: 'ไม่สามารถยืมได้: คุณมีหนังสือที่ยืมค้างอยู่ 3 เล่ม (โควต้าเต็ม)'
       });
