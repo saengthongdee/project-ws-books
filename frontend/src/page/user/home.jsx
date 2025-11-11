@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../../components/navUser";
 import { Search, Filter } from "lucide-react";
-import BookCard from "../../components/BookCard"; // ✅ เพิ่มตรงนี้
+import BookCard from "../../components/BookCard";
 
-/*************  ✨ Windsurf Command ⭐  *************/
-/*******  419eca73-2d68-4f37-8ce3-03dcccdee689  *******/
 function Home() {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
@@ -14,10 +12,19 @@ function Home() {
   const [booksPerPage, setBooksPerPage] = useState(20);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/books").then((res) => {
-      setBooks(res.data.results);
-    });
+    fetchBooks();
   }, []);
+
+  const fetchBooks = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/books');
+      if (response.status === 200) {
+        setBooks(response.data.results);
+      }
+    } catch (error) {
+      console.log('fetching error', error);
+    }
+  }
 
   const filteredBooks = books.filter((b) => {
     const matchesSearch =
