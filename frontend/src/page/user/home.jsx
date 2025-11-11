@@ -10,7 +10,6 @@ function Home() {
   const [books, setBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("ทั้งหมด");
-
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage, setBooksPerPage] = useState(20);
 
@@ -52,7 +51,7 @@ function Home() {
       <div className="flex-1 flex flex-col items-center w-full px-4 pt-6">
 
         {/* Search Box */}
-        <div className="w-full max-w-3xl bg-white p-5 rounded-xl shadow-md mb-6">
+        <div className="w-full  max-w-3xl bg-white p-5 rounded-xl shadow-md mb-6">
           <div className="flex gap-3 flex-col md:flex-row">
             <div className="relative flex-1">
               <Search
@@ -125,7 +124,7 @@ function Home() {
             disabled={currentPage === 1}
             className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
           >
-            ย้อนกลับ
+            ย้อsนกลับ
           </button>
 
           <span className="px-4 py-2">
