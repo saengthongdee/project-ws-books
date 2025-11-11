@@ -1,6 +1,7 @@
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Navbar from "../../components/navUser";
 
 export default function BookDetail() {
     const { id } = useParams();
@@ -19,20 +20,22 @@ export default function BookDetail() {
     const available = book.available ?? 0;
 
     return (
-        <div className="bg-gray-50 min-h-screen">
-            <div className="max-w-6xl mx-auto p-6">
+        <div className="min-h-screen bg-gray-50 flex flex-col">
+            <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+            <div className="max-w-6xl w-full mx-auto p-6">
                 <div className="mb-4">
                     <Link to="/" className="text-sm text-emerald-700 hover:underline">← กลับหน้ารายการ</Link>
                 </div>
 
-                <div className="bg-white rounded-3xl shadow-lg p-6 md:p-8 grid grid-cols-1 md:grid-cols-[280px,1fr] gap-10">
-                    
+                <div className="bg-white rounded-3xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-2 gap-12">
+
                     {/* รูปหนังสือ */}
                     <div className="flex justify-center items-start">
                         <img
                             src={book.cover_image}
                             alt={book.title}
-                            className="rounded-xl shadow-lg object-contain max-h-[480px] w-auto"
+                            className="rounded-xl shadow-lg object-contain w-full max-w-[380px] max-h-[520px]"
                         />
                     </div>
 
@@ -54,8 +57,9 @@ export default function BookDetail() {
                                 {book.description || "ยังไม่มีคำอธิบาย"}
                             </p>
                         </div>
-                        {/* ปุ่มเว้นระยะเพิ่ม */}
-                        <div className="mt-7 flex flex-wrap gap-3">
+
+                        {/* ปุ่ม */}
+                        <div className="mt-8">
                             <button
                                 className="px-6 py-3 rounded-xl shadow-md bg-emerald-600 hover:bg-emerald-700 text-white disabled:bg-gray-300 disabled:text-gray-600"
                                 disabled={available <= 0}
@@ -68,5 +72,7 @@ export default function BookDetail() {
                 </div>
             </div>
         </div>
+        </div>
+
     );
 }
